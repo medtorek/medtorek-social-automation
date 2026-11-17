@@ -1,0 +1,11 @@
+{
+  "test_id": "test-envio-2026-11-17",
+  "sent": {
+    "twitter": {
+      "buffer_post_id": "6afc1b87f94854b5e25e5d21",
+      "buffer_status": "sent",
+      "created_at": "2026-11-17T10:16:57.446824+01:00",
+      "media_url": "https://raw.githubusercontent.com/medtorek/medtorek-social-automation/main/public/2026-11-17-x.png"
+    }
+  }
+}
