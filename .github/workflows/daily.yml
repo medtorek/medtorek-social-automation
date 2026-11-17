@@ -20,7 +20,7 @@ jobs:
     env:
       BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-      GEMINI_MODEL: ${{ vars.GEMINI_MODEL || 'gemini-2.5-flash-lite' }}
+      GEMINI_MODEL: ${{ vars.GEMINI_MODEL || 'gemini-3.5-flash-lite' }}
       AUTO_PUBLISH: ${{ vars.AUTO_PUBLISH || 'false' }}
       FORCE_PREVIEW: ${{ inputs.preview_only || 'false' }}
       GITHUB_REPOSITORY: ${{ github.repository }}
