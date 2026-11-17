@@ -280,6 +280,9 @@ def publish():
     if not path.exists():
         raise RuntimeError("No existe vista previa; no publicar.")
     obj=json.loads(path.read_text(encoding="utf-8"))
+    if obj.get("drafted"):
+        print("El artículo de hoy ya tiene borradores de prueba. No se añadirá a la cola; se evitarán duplicados.")
+        return
     selected=channels()
     for service in ("twitter","linkedin","instagram"):
         if obj["posted"].get(service):
