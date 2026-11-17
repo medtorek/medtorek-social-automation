@@ -122,25 +122,48 @@ def gemini_write(item):
         + json.dumps(item, ensure_ascii=False)
     )
     print("Gemini model:", model)
-    result = request("POST", f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
-                     headers={"x-goog-api-key": key},
-                     json={"contents":[{"parts":[{"text":prompt}]}],
-                           "generationConfig":{"temperature":0.15,"responseMimeType":"application/json"}}).json()
-    candidate = result.get("candidates", [{}])[0]
-    if candidate.get("finishReason") != "STOP":
-        raise RuntimeError("Gemini no completó la salida correctamente.")
-    raw = "".join(p.get("text", "") for p in candidate.get("content", {}).get("parts", []))
-    if raw.strip().upper() == "REJECT":
-        raise RuntimeError("El modelo rechazó el artículo por falta de evidencia.")
-    data = json.loads(raw)
-    for field in ("x", "linkedin", "instagram"):
-        value = data[field]
-        if not isinstance(value, str) or item["url"] not in value or len(value) > {"x": 240,"linkedin":1000,"instagram":800}[field]:
-            raise RuntimeError(f"Texto {field} inválido: no publicar.")
-    for field in ("visual_title", "visual_subtitle"):
-        if not isinstance(data[field], str) or len(data[field]) > 65:
-            raise RuntimeError("Texto de imagen inválido.")
-    return data
+    limits = {"x": 240, "linkedin": 1000, "instagram": 800}
+    # The model may omit or rewrite the DOI and exceed its requested length.
+    # Request a correction rather than silently truncating clinical claims.
+    for attempt in range(3):
+        result = request("POST", f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
+                         headers={"x-goog-api-key": key},
+                         json={"contents":[{"parts":[{"text":prompt}]}],
+                               "generationConfig":{"temperature":0.1,"responseMimeType":"application/json"}}).json()
+        candidate = result.get("candidates", [{}])[0]
+        if candidate.get("finishReason") != "STOP":
+            raise RuntimeError("Gemini no completó la salida correctamente.")
+        raw = "".join(p.get("text", "") for p in candidate.get("content", {}).get("parts", []))
+        if raw.strip().upper() == "REJECT":
+            raise RuntimeError("El modelo rechazó el artículo por falta de evidencia.")
+        data = json.loads(raw)
+        errors = []
+        for field, limit in limits.items():
+            value = data.get(field)
+            if not isinstance(value, str) or not value.strip():
+                errors.append(field + ": vacío")
+                continue
+            # Use the canonical, independently checked DOI instead of a model-generated URL.
+            value = re.sub(r"https?://(?:dx\\.)?doi\\.org/\\S+", "", value).strip()
+            value = value.rstrip(" .,;") + "\\n" + item["url"]
+            data[field] = value
+            if len(value) > limit:
+                errors.append(f"{field}: {len(value)} caracteres (máximo {limit})")
+        for field in ("visual_title", "visual_subtitle"):
+            if not isinstance(data.get(field), str) or len(data[field]) > 65:
+                errors.append(field + ": longitud o tipo inválido")
+        if not errors:
+            return data
+        print(f"Validación intento {attempt+1}: " + "; ".join(errors), file=sys.stderr)
+        prompt += (
+            "\\nCORRECCIÓN OBLIGATORIA: " + "; ".join(errors) +
+            ". Reescribe todos los campos del objeto JSON. Reduce la extensión sin omitir "
+            "hallazgo concreto ni limitación y sin introducir hechos nuevos. "
+            "No es necesario redactar el DOI: el programa lo añade al final. "
+            "En X, reserva al menos " + str(len(item["url"])+2) +
+            " caracteres para el DOI que añadirá el programa. Devuelve exclusivamente JSON."
+        )
+    raise RuntimeError("La generación no superó la validación tras 3 intentos; no publicar.")
 
 def font(size, bold=False):
     names = ["/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf" if bold
