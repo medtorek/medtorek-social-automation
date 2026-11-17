@@ -1,0 +1,64 @@
+name: Medtorek scientific publishing
+on:
+  schedule:
+    - cron: '30 6,7 * * *'
+  workflow_dispatch:
+    inputs:
+      preview_only:
+        description: 'Only prepare content (never publish)'
+        type: boolean
+        default: true
+permissions:
+  contents: write
+concurrency:
+  group: medtorek-publisher
+  cancel-in-progress: false
+jobs:
+  daily:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      GEMINI_MODEL: ${{ vars.GEMINI_MODEL || 'gemini-2.5-flash-lite' }}
+      AUTO_PUBLISH: ${{ vars.AUTO_PUBLISH || 'false' }}
+      FORCE_PREVIEW: ${{ inputs.preview_only || 'false' }}
+      GITHUB_REPOSITORY: ${{ github.repository }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements.txt
+      - name: Check Copenhagen time
+        id: clock
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          python - <<'PY'
+          import datetime,os
+          from zoneinfo import ZoneInfo
+          now=datetime.datetime.now(ZoneInfo('Europe/Copenhagen'))
+          valid=os.environ['EVENT_NAME']=='workflow_dispatch' or (now.hour==8 and 25<=now.minute<=45)
+          with open(os.environ['GITHUB_OUTPUT'],'a') as f:
+              print('run='+str(valid).lower(),file=f)
+          print(now,valid)
+          PY
+      - name: Prepare
+        if: steps.clock.outputs.run == 'true'
+        run: python publisher.py prepare
+      - name: Commit material
+        if: steps.clock.outputs.run == 'true'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/ state/
+          if ! git diff --cached --quiet; then git commit -m 'Prepare scientific material'; git push; fi
+      - name: Queue in Buffer (off by default)
+        if: steps.clock.outputs.run == 'true'
+        run: python publisher.py publish
+      - name: Record receipts
+        if: steps.clock.outputs.run == 'true'
+        run: |
+          git add state/
+          if ! git diff --cached --quiet; then git commit -m 'Record Buffer results'; git push; fi
