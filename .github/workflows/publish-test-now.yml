@@ -1,11 +1,6 @@
-name: PRUEBA PUBLICA ahora (X LinkedIn Instagram)
+name: PUBLICAR PRUEBA REAL AHORA (3 redes)
 on:
   workflow_dispatch:
-    inputs:
-      confirm:
-        description: 'Escribir PUBLISH_TEST_NOW para publicar realmente en las 3 redes'
-        required: true
-        type: string
 permissions:
   contents: write
 concurrency:
@@ -13,13 +8,12 @@ concurrency:
   cancel-in-progress: false
 jobs:
   publish-test:
-    if: ${{ inputs.confirm == 'PUBLISH_TEST_NOW' }}
     runs-on: ubuntu-latest
     timeout-minutes: 12
     env:
       BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
       GITHUB_REPOSITORY: ${{ github.repository }}
-      CONFIRM_PUBLIC_TEST: ${{ inputs.confirm }}
+      CONFIRM_PUBLIC_TEST: PUBLISH_TEST_NOW
     steps:
       - uses: actions/checkout@v4
         with:
@@ -28,9 +22,9 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install -r requirements.txt
-      - name: Identidad para registrar resultados
+      - name: Preparar registro de resultados
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-      - name: Publicar contenido de prueba (PUBLICO)
+      - name: PUBLICAR prueba real en X, LinkedIn e Instagram
         run: python publish_test_now.py
