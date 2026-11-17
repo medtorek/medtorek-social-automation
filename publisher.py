@@ -238,6 +238,39 @@ def channels():
         raise RuntimeError("No están los tres canales X, LinkedIn e Instagram en Buffer: "+str(sorted(selected)))
     return selected
 
+def create_drafts():
+    """Explicit manual validation: create Buffer drafts that cannot be automatically published."""
+    path = STATE / (TODAY + ".json")
+    if not path.exists():
+        raise RuntimeError("Prepara primero el contenido con el workflow diario.")
+    obj = json.loads(path.read_text(encoding="utf-8"))
+    selected = channels()
+    # A draft is not a scheduled post. It never enters the publication queue.
+    for service in ("twitter", "linkedin", "instagram"):
+        if obj.get("drafted", {}).get(service):
+            print(service, "ya tiene borrador; se omite")
+            continue
+        content = obj["copy"][{"twitter":"x", "linkedin":"linkedin", "instagram":"instagram"}[service]]
+        media_url = "https://raw.githubusercontent.com/" + os.environ["GITHUB_REPOSITORY"] + "/main/public/" + obj["images"][service]
+        check = request("GET", media_url)
+        if not check.headers.get("Content-Type", "").startswith("image/"):
+            raise RuntimeError("Imagen no disponible para " + service)
+        mutation = (
+            "mutation { createPost(input: { text: " + json.dumps(content, ensure_ascii=False) +
+            " channelId: " + json.dumps(selected[service]["id"]) +
+            " schedulingType: automatic mode: addToQueue saveToDraft: true " +
+            " assets: [{ image: { url: " + json.dumps(media_url) + " } }] }) " +
+            "{ ... on PostActionSuccess { post { id status } } ... on MutationError { message } } }"
+        )
+        response = gql(mutation)["createPost"]
+        post = response.get("post") or {}
+        if not post.get("id") or post.get("status") != "draft":
+            raise RuntimeError("Buffer no confirmó un borrador para " + service + ": " + str(response))
+        obj.setdefault("drafted", {})[service] = post["id"]
+        write_state(obj)
+        print(service, "borrador creado; NO programado", post["id"])
+
+
 def publish():
     if os.getenv("AUTO_PUBLISH","false").lower() != "true" or os.getenv("FORCE_PREVIEW","false").lower() == "true":
         print("AUTO_PUBLISH desactivado / modo vista previa. No se envía nada.")
@@ -273,6 +306,7 @@ if __name__ == "__main__":
         command=sys.argv[1] if len(sys.argv)>1 else ""
         if command=="prepare": prepare()
         elif command=="publish": publish()
+        elif command=="draft": create_drafts()
         elif command=="check-channels":
             print(json.dumps(channels(),indent=2))
         else: raise ValueError("Use prepare, publish or check-channels")
