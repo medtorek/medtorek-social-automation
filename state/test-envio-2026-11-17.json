@@ -12,6 +12,12 @@
       "buffer_status": "sending",
       "created_at": "2026-11-17T10:17:08.970355+01:00",
       "media_url": "https://raw.githubusercontent.com/medtorek/medtorek-social-automation/main/public/2026-11-17-x.png"
+    },
+    "instagram": {
+      "buffer_post_id": "6afc1b96d62bd5b4863760eb",
+      "buffer_status": "sent",
+      "created_at": "2026-11-17T10:17:18.613204+01:00",
+      "media_url": "https://raw.githubusercontent.com/medtorek/medtorek-social-automation/main/public/2026-11-17-instagram.png"
     }
   }
 }
