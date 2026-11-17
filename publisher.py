@@ -107,7 +107,7 @@ def gemini_write(item):
     key = os.getenv("GEMINI_API_KEY")
     if not key:
         raise RuntimeError("Falta GEMINI_API_KEY. No publicar.")
-    model = os.getenv("GEMINI_MODEL", "gemini-2.5-flash-lite")
+    model = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
     prompt = (
         "Actúas como editor científico médico en español. SOLO puedes usar el título, DOI y resumen suministrados. "
         "No debes inventar resultados, tamaños muestrales, valores, efectos ni conclusiones. "
@@ -121,6 +121,7 @@ def gemini_write(item):
         "El resumen puede ser insuficiente para verificar todas las cifras: evita cifras no esenciales.\n\n"
         + json.dumps(item, ensure_ascii=False)
     )
+    print("Gemini model:", model)
     result = request("POST", f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
                      headers={"x-goog-api-key": key},
                      json={"contents":[{"parts":[{"text":prompt}]}],
