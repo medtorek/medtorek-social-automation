@@ -259,6 +259,7 @@ def create_drafts():
             "mutation { createPost(input: { text: " + json.dumps(content, ensure_ascii=False) +
             " channelId: " + json.dumps(selected[service]["id"]) +
             " schedulingType: automatic mode: addToQueue saveToDraft: true " +
+            (" metadata: { instagram: { type: post, shouldShareToFeed: true, isAiGenerated: true } } " if service == "instagram" else "") +
             " assets: [{ image: { url: " + json.dumps(media_url) + " } }] }) " +
             "{ ... on PostActionSuccess { post { id status } } ... on MutationError { message } } }"
         )
@@ -292,7 +293,7 @@ def publish():
             raise RuntimeError("Imagen pública no accesible.")
         mutation="mutation { createPost(input: { text: "+json.dumps(text,ensure_ascii=False)+ \
             " channelId: "+json.dumps(selected[service]["id"])+ \
-            " schedulingType: automatic mode: addToQueue assets: [{ image: { url: "+json.dumps(url)+" } }] })"+ \
+            " schedulingType: automatic mode: addToQueue "+(" metadata: { instagram: { type: post, shouldShareToFeed: true, isAiGenerated: true } } " if service=="instagram" else "")+" assets: [{ image: { url: "+json.dumps(url)+" } }] })"+ \
             " { ... on PostActionSuccess { post { id status } } ... on MutationError { message } } }"
         response=gql(mutation)["createPost"]
         if not response.get("post",{}).get("id"):
