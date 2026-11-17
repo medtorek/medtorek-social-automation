@@ -144,8 +144,8 @@ def gemini_write(item):
                 errors.append(field + ": vacío")
                 continue
             # Use the canonical, independently checked DOI instead of a model-generated URL.
-            value = re.sub(r"https?://(?:dx\\.)?doi\\.org/\\S+", "", value).strip()
-            value = value.rstrip(" .,;") + "\\n" + item["url"]
+            value = re.sub(r"https?://(?:dx\.)?doi\.org/\S+", "", value).strip()
+            value = value.rstrip(" .,;") + "\n" + item["url"]
             data[field] = value
             if len(value) > limit:
                 errors.append(f"{field}: {len(value)} caracteres (máximo {limit})")
@@ -156,7 +156,7 @@ def gemini_write(item):
             return data
         print(f"Validación intento {attempt+1}: " + "; ".join(errors), file=sys.stderr)
         prompt += (
-            "\\nCORRECCIÓN OBLIGATORIA: " + "; ".join(errors) +
+            "\nCORRECCIÓN OBLIGATORIA: " + "; ".join(errors) +
             ". Reescribe todos los campos del objeto JSON. Reduce la extensión sin omitir "
             "hallazgo concreto ni limitación y sin introducir hechos nuevos. "
             "No es necesario redactar el DOI: el programa lo añade al final. "
