@@ -61,7 +61,7 @@ def main():
     selected = channels()
     receipt_path = ROOT / "state" / ("approved-" + slug + ".json")
     receipt = json.loads(receipt_path.read_text(encoding="utf-8")) if receipt_path.exists() else {"doi": DOI, "sent": {}}
-    for service, field in (("twitter", "x"), ("linkedin", "linkedin"), ("instagram")):
+    for service, field in (("twitter", "x"), ("linkedin", "linkedin"), ("instagram", "instagram")):
         if receipt["sent"].get(service):
             print(service, "ya enviado: se evita duplicado")
             continue
