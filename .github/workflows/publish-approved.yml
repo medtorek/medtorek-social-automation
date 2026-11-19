@@ -1,0 +1,48 @@
+
+name: Publicar articulo aprobado
+
+on:
+  workflow_dispatch:
+    inputs:
+      doi:
+        description: "DOI exacto del articulo aprobado"
+        required: true
+        type: string
+      approval:
+        description: "Escribe APROBADO para confirmar"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comprobar aprobacion
+        env:
+          DOI: ${{ inputs.doi }}
+          APPROVAL: ${{ inputs.approval }}
+        run: |
+          python - <<'PY'
+          import os
+          import re
+
+          approval = os.environ["APPROVAL"]
+          doi = os.environ["DOI"].strip()
+
+          if approval != "APROBADO":
+              raise SystemExit("Falta aprobacion explicita")
+
+          if not re.fullmatch(
+              r"10\.\d{4,9}/\S+",
+              doi,
+              flags=re.IGNORECASE
+          ):
+              raise SystemExit("DOI no valido")
+
+          print("Aprobacion registrada")
+          print("DOI:", doi)
+          print("Publicacion todavia desactivada")
+          PY
