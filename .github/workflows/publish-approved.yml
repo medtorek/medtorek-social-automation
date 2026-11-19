@@ -1,48 +1,50 @@
-
 name: Publicar articulo aprobado
 
 on:
   workflow_dispatch:
     inputs:
       doi:
-        description: "DOI exacto del articulo aprobado"
+        description: "DOI exacto del articulo aprobado (sin URL)"
         required: true
         type: string
       approval:
-        description: "Escribe APROBADO para confirmar"
+        description: "Escribe PUBLICAR seguido de un espacio y el DOI exacto"
         required: true
         type: string
+      preview_only:
+        description: "Prueba segura sin publicar (desmarcar solo tras revisar)"
+        required: true
+        type: boolean
+        default: true
 
 permissions:
-  contents: read
+  contents: write
+
+concurrency:
+  group: medtorek-publisher
+  cancel-in-progress: false
 
 jobs:
-  validate:
+  publish-approved:
     runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      APPROVED_DOI: ${{ inputs.doi }}
+      APPROVAL_CONFIRM: ${{ inputs.approval }}
+      PREVIEW_ONLY: ${{ inputs.preview_only }}
+      BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+      GITHUB_REPOSITORY: ${{ github.repository }}
     steps:
-      - name: Comprobar aprobacion
-        env:
-          DOI: ${{ inputs.doi }}
-          APPROVAL: ${{ inputs.approval }}
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Set git identity for publication receipts
         run: |
-          python - <<'PY'
-          import os
-          import re
-
-          approval = os.environ["APPROVAL"]
-          doi = os.environ["DOI"].strip()
-
-          if approval != "APROBADO":
-              raise SystemExit("Falta aprobacion explicita")
-
-          if not re.fullmatch(
-              r"10\.\d{4,9}/\S+",
-              doi,
-              flags=re.IGNORECASE
-          ):
-              raise SystemExit("DOI no valido")
-
-          print("Aprobacion registrada")
-          print("DOI:", doi)
-          print("Publicacion todavia desactivada")
-          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+      - name: Validate approved material and optionally publish now
+        run: python publish_approved.py
