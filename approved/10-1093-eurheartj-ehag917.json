@@ -1,0 +1,14 @@
+{
+  "doi": "10.1093/eurheartj/ehag917",
+  "approved": true,
+  "copy": {
+    "x": "IA aplicada al ECG predijo cardiomiopatía dilatada futura (C-index 0,80–0,87). En cohortes familiares, VPN a 5 años: 91,5–95,5%; VPP: 39,4–42,4%. Útil para estratificar vigilancia, pero aún retrospectivo. https://doi.org/10.1093/eurheartj/ehag917",
+    "linkedin": "¿Puede un ECG analizado con IA ayudar a identificar familiares con riesgo de cardiomiopatía dilatada? Un estudio retrospectivo publicado en European Heart Journal comunicó un C-index de 0,80–0,87 para predicción futura. En cohortes familiares, el valor predictivo negativo a cinco años fue del 91,5–95,5%, frente a un valor predictivo positivo del 39,4–42,4%. Es una herramienta potencial para orientar la vigilancia, no un diagnóstico ni un sustituto de la valoración clínica y la ecocardiografía. Falta demostrar utilidad y seguridad en estudios prospectivos. https://doi.org/10.1093/eurheartj/ehag917",
+    "instagram": "ECG + IA: señal de riesgo, no diagnóstico. Un estudio retrospectivo investigó si la IA aplicada al ECG podía anticipar cardiomiopatía dilatada. En cohortes familiares, el valor predictivo negativo a cinco años fue del 91,5–95,5%, pero el positivo fue del 39,4–42,4%. Puede ayudar a estudiar cómo personalizar el seguimiento, pero aún no justifica sustituir la ecocardiografía ni cambiar por sí solo las decisiones clínicas. https://doi.org/10.1093/eurheartj/ehag917"
+  },
+  "images": {
+    "twitter": "public/ecg-ai-dcm-2026-11-20.png",
+    "linkedin": "public/ecg-ai-dcm-2026-11-20.png",
+    "instagram": "public/ecg-ai-dcm-2026-11-20.png"
+  }
+}
