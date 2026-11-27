@@ -1,0 +1,14 @@
+{
+  "doi": "10.1093/ehjdh/ztag189",
+  "approved": true,
+  "copy": {
+    "x": "En 36.617 pacientes con FA, un modelo no supervisado identificó 3 fenotipos. El grupo mayor y con peor función renal tuvo más riesgo de muerte, ictus o sangrado (HR 2,24). Describe heterogeneidad, pero aún sin validación externa. https://doi.org/10.1093/ehjdh/ztag189",
+    "linkedin": "La fibrilación auricular no presenta un riesgo uniforme. Un análisis del registro GLORIA-AF con 36.617 pacientes identificó tres fenotipos clínicos mediante aprendizaje no supervisado. El grupo de mayor edad y peor función renal presentó un HR de 2,24 para el desenlace combinado de muerte, ictus o hemorragia frente al grupo de referencia. Interesante para la estratificación pronóstica en Atención Primaria, aunque todavía requiere validación externa y evaluación de utilidad clínica. https://doi.org/10.1093/ehjdh/ztag189",
+    "instagram": "Una FA, tres fenotipos. El análisis del registro GLORIA-AF muestra diferencias pronósticas entre grupos de pacientes con fibrilación auricular. La edad y la función renal siguen siendo relevantes. El agrupamiento no sustituye las escalas validadas ni justifica por sí solo cambios terapéuticos. https://doi.org/10.1093/ehjdh/ztag189"
+  },
+  "images": {
+    "twitter": "public/fa-fenotipos-2026-11-27.png",
+    "linkedin": "public/fa-fenotipos-2026-11-27.png",
+    "instagram": "public/fa-fenotipos-2026-11-27.png"
+  }
+}
