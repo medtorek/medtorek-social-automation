@@ -1,0 +1,23 @@
+{
+  "pmid": "43061281",
+  "doi": "10.1007/s44164-026-00162-6",
+  "title": "Modern cell-based assays for biomedical research: from conventional methods to AI-driven high content analysis.",
+  "abstract": "In vitro cell-based assays are fundamental tools in biomedical research, supporting investigations of cellular physiology, disease mechanisms, drug discovery, toxicology, regenerative medicine, and precision therapeutics. However, conventional two-dimensional (2D) cell culture models often fail to recapitulate the structural complexity and physiological functions of native tissues, prompting the development of advanced platforms, including three-dimensional (3D) cultures, organoids, organ-on-a-chip technologies, and microphysiological systems. Recent advances in cell viability and cytotoxicity assessment, functional cellular analysis, molecular profiling, clustered regularly interspaced short palindromic repeats (CRISPR)-based functional genomics, high-content imaging, flow cytometry, single-cell and spatial multi-omics, and automated high-throughput screening have expanded the analytical capabilities of cell-based assays. Furthermore, the integration of artificial intelligence (AI)-assisted image analysis and computational biology has enhanced cellular phenotyping, biomarker discovery, and mechanistic investigation, with the potential to improve the prediction of therapeutic efficacy and toxicity. Nevertheless, challenges related to physiological relevance, technical variability, inadequate standardization, high operational costs, scalability, poor reproducibility, cell-line misidentification, batch-to-batch variation, and inconsistent reporting continue to hinder translational applications. Future progress will depend on integrating physiologically relevant models with AI-driven analytics, spatial multi-omics, digital pathology, automated screening, and microphysiological systems. Standardized protocols, harmonized reporting practices, and interdisciplinary collaboration will be essential to improve reproducibility, strengthen regulatory acceptance, advance precision medicine, and reduce reliance on animal experimentation. In this context, this review critically evaluates conventional and emerging in vitro cell-based assays, emphasizing their biological principles, analytical capabilities, translational applications, and practical limitations, while highlighting future opportunities to improve predictive accuracy, reproducibility, and clinical translation.",
+  "journal": "In vitro models",
+  "pub_year": "2027",
+  "published": "2026-11-18",
+  "url": "https://doi.org/10.1007/s44164-026-00162-6",
+  "copy": {
+    "x": "Los ensayos celulares modernos combinan IA y modelos avanzados para mejorar la biomedicina, pero persisten retos de estandarización y variabilidad técnica que limitan su aplicación traslacional\nhttps://doi.org/10.1007/s44164-026-00162-6",
+    "linkedin": "Una reciente revisión examina la evolución de los ensayos celulares in vitro hacia plataformas avanzadas como cultivos tridimensionales, organoides y sistemas integrados con inteligencia artificial para análisis de alto contenido. Estos métodos mejoran la caracterización celular y el descubrimiento de biomarcadores en la investigación biomédica. Sin embargo, el estudio destaca limitaciones importantes como la variabilidad técnica, la falta de estandarización, los elevados costos operativos y los problemas de reproducibilidad que dificultan su aplicación clínica directa. Se requieren protocolos normalizados y una mejor integración metodológica para validar su capacidad predictiva real. Más detalles en\nhttps://doi.org/10.1007/s44164-026-00162-6",
+    "instagram": "Los ensayos celulares modernos integran inteligencia artificial y modelos tridimensionales avanzados para optimizar la investigación biomédica y el análisis fenotípico. Aunque estas tecnologías amplían las capacidades analíticas, existen limitaciones considerables como la variabilidad técnica, la falta de estandarización y los problemas de reproducibilidad que afectan su translación. Lee el DOI en la descripción para conocer el análisis completo\nhttps://doi.org/10.1007/s44164-026-00162-6",
+    "visual_title": "Evolución de los ensayos celulares en biomedicina",
+    "visual_subtitle": "Nuevas plataformas tecnológicas y sus desafíos metodológicos"
+  },
+  "images": {
+    "twitter": "2026-11-28-x.png",
+    "linkedin": "2026-11-28-x.png",
+    "instagram": "2026-11-28-instagram.png"
+  },
+  "posted": {}
+}
